@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 9068632115574086291}
   m_Layer: 0
   m_Name: Bomb
-  m_TagString: Untagged
+  m_TagString: BadTarget
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -128,6 +128,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 203e0fa163fe6a04e8d90b46330576f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Target
+  explosionParticle: {fileID: 4758139293545943008, guid: c7ad2532a6eeb40b59033c75e71fa054, type: 3}
+  targetPoints: -10
 --- !u!54 &-3644277979449483892
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -174,5 +176,5 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.21539469
-  m_Center: {x: -0.000000023841858, y: -0.00860281, z: 0.000000047683717}
+  m_Radius: 0.25764093
+  m_Center: {x: -0.000000023841858, y: 0.033643436, z: 0.000000047683717}

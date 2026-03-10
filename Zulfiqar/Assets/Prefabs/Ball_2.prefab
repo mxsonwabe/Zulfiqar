@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 6821990082369934255}
   m_Layer: 0
   m_Name: Ball_2
-  m_TagString: Untagged
+  m_TagString: GoodTarget
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -105,6 +105,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 203e0fa163fe6a04e8d90b46330576f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Target
+  explosionParticle: {fileID: 2088871590894813759, guid: 745208c9d6e104225bd99e1ab894e3bb, type: 3}
+  targetPoints: 10
 --- !u!54 &4871573760473465354
 Rigidbody:
   m_ObjectHideFlags: 0
