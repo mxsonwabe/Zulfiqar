@@ -56,7 +56,7 @@ public class Target : MonoBehaviour, IPointerDownHandler
   {
     if (gameObject.CompareTag("GoodTarget"))
     {
-      gameManager.UpdateScore(-10);
+      gameManager.UpdateScore(-targetPoints);
     }
     if (gameManager.Score < 0)
       gameManager.GameOver();

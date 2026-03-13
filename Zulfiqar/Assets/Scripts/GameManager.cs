@@ -8,15 +8,18 @@ using System.Globalization;
 
 public class GameManager : MonoBehaviour
 {
-  int score = 0;
+  int score = 0, currentTimeCount = 0;
   float spawnRate = 1.25f;
   bool isGameActive;
   public int Score { get; private set; }
   [SerializeField] private Button resetButton;
   [SerializeField] private TextMeshProUGUI scoreText;
+  [SerializeField] private TextMeshProUGUI timerText;
   [SerializeField] private TextMeshProUGUI gameOverText;
+  [SerializeField] private TextMeshProUGUI gameWonText;
   [SerializeField] private GameObject titleScreen;
   [SerializeField] private List<GameObject> gameObjects;
+  [SerializeField] private int timeCounter = 60;
   // Start is called once before the first execution of Update after the MonoBehaviour is created
   void Start()
   {
@@ -28,6 +31,19 @@ public class GameManager : MonoBehaviour
     scoreText.text = $"Score: {score}";
   }
 
+  IEnumerator GameTimer()
+  {
+    while (isGameActive)
+    {
+      yield return new WaitForSeconds(1f);
+      if (currentTimeCount >= timeCounter)
+        GameWon();
+      if ((timeCounter - currentTimeCount) < 10)
+        timerText.color = Color.green;
+      timerText.text = $"Time: {timeCounter - currentTimeCount}";
+      currentTimeCount++;
+    }
+  }
   IEnumerator SpawnTargets()
   {
     while (isGameActive)
@@ -48,6 +64,13 @@ public class GameManager : MonoBehaviour
   {
     isGameActive = false;
     gameOverText.gameObject.SetActive(true);
+    resetButton.gameObject.SetActive(true);
+    //Time.timeScale = 0f;
+  }
+  public void GameWon()
+  {
+    isGameActive = false;
+    gameWonText.gameObject.SetActive(true);
     resetButton.gameObject.SetActive(true);
     //Time.timeScale = 0f;
   }
@@ -79,5 +102,6 @@ public class GameManager : MonoBehaviour
     resetButton.gameObject.SetActive(false);
     gameOverText.gameObject.SetActive(false);
     StartCoroutine(nameof(SpawnTargets));
+    StartCoroutine(nameof(GameTimer));
   }
 }
