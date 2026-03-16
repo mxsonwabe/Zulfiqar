@@ -59,7 +59,7 @@ public class Target : MonoBehaviour, IPointerDownHandler
       gameManager.UpdateScore(-targetPoints);
     }
     if (gameManager.Score < 0)
-      gameManager.GameOver();
+      gameManager.LoseLife();
     Destroy(gameObject);
   }
   public void OnPointerDown(PointerEventData eventData)
@@ -77,7 +77,7 @@ public class Target : MonoBehaviour, IPointerDownHandler
     Instantiate(explosionParticle, transform.position, explosionParticle.transform.rotation);
     if (gameManager.Score < 0)
     {
-      gameManager.GameOver();
+      gameManager.LoseLife();
     }
     Destroy(gameObject);
   }

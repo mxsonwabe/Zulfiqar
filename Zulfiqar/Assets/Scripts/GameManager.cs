@@ -5,14 +5,17 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Globalization;
+using System;
 
 public class GameManager : MonoBehaviour
 {
-  int score = 0, currentTimeCount = 0;
+  int score = 0, currentTimeCount = 0, lives = 3;
   float spawnRate = 1.25f;
   bool isGameActive;
+  AudioSource audioSource;
   public int Score { get; private set; }
   [SerializeField] private Button resetButton;
+  [SerializeField] LifeController[] livesUIController;
   [SerializeField] private TextMeshProUGUI scoreText;
   [SerializeField] private TextMeshProUGUI timerText;
   [SerializeField] private TextMeshProUGUI gameOverText;
@@ -20,9 +23,15 @@ public class GameManager : MonoBehaviour
   [SerializeField] private GameObject titleScreen;
   [SerializeField] private List<GameObject> gameObjects;
   [SerializeField] private int timeCounter = 60;
+  //[SerializeField] private AudioClip backgroundAudio;
   // Start is called once before the first execution of Update after the MonoBehaviour is created
   void Start()
   {
+    audioSource = GetComponent<AudioSource>();
+    if (!audioSource)
+    {
+      Debug.LogWarning($"NO AUDIO SOURCE FOUND IN GAMEM+MANAGER: {this}");
+    }
   }
 
   // Update is called once per frame
@@ -49,7 +58,7 @@ public class GameManager : MonoBehaviour
     while (isGameActive)
     {
       yield return new WaitForSeconds(spawnRate);
-      int idx = Random.Range(0, gameObjects.Count);
+      int idx = UnityEngine.Random.Range(0, gameObjects.Count);
       Instantiate(gameObjects[idx]);
     }
   }
@@ -66,6 +75,25 @@ public class GameManager : MonoBehaviour
     gameOverText.gameObject.SetActive(true);
     resetButton.gameObject.SetActive(true);
     //Time.timeScale = 0f;
+  }
+
+  public void LoseLife()
+  {
+    if (!isGameActive) return;
+    lives--;
+    if (lives >= 0)
+    {
+      livesUIController[lives].ExplodeAndDestroy();
+    }
+    if (lives <= 0)
+    {
+      GameOver();
+    }
+    else
+    {
+      score = 0;
+      Score = 0;
+    }
   }
   public void GameWon()
   {

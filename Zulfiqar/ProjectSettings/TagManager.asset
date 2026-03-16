@@ -7,11 +7,12 @@ TagManager:
   - GameManager
   - GoodTarget
   - BadTarget
+  - LifeIcon
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Lives
   - Water
   - UI
   - 
