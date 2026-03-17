@@ -18,7 +18,7 @@ public class LifeController : MonoBehaviour
 
   public void ExplodeAndDestroy()
   {
-    Debug.Log($"Explode and Destroy: {this}");
+    //Debug.Log($"Explode and Destroy: {this}");
     Destroy(gameObject);
     //ParticleSystem effect = 
     //Instantiate(explosionParticle, transform.position, explosionParticle.transform.rotation, transform.parent);

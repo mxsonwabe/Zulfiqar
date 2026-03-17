@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using System.Globalization;
+using UnityEngine.InputSystem;
 using System;
 
 public class GameManager : MonoBehaviour
@@ -12,7 +12,9 @@ public class GameManager : MonoBehaviour
   int score = 0, currentTimeCount = 0, lives = 3;
   float spawnRate = 1.25f;
   bool isGameActive;
+  bool isPaused = false;
   AudioSource audioSource;
+  InputAction pauseAction;
   public int Score { get; private set; }
   [SerializeField] private Button resetButton;
   [SerializeField] LifeController[] livesUIController;
@@ -21,6 +23,7 @@ public class GameManager : MonoBehaviour
   [SerializeField] private TextMeshProUGUI gameOverText;
   [SerializeField] private TextMeshProUGUI gameWonText;
   [SerializeField] private GameObject titleScreen;
+  [SerializeField] private GameObject pausePanel;
   [SerializeField] private List<GameObject> gameObjects;
   [SerializeField] private int timeCounter = 60;
   //[SerializeField] private AudioClip backgroundAudio;
@@ -32,12 +35,17 @@ public class GameManager : MonoBehaviour
     {
       Debug.LogWarning($"NO AUDIO SOURCE FOUND IN GAMEM+MANAGER: {this}");
     }
+    pauseAction = InputSystem.actions.FindAction("Player/Pause", true);
   }
 
   // Update is called once per frame
   void Update()
   {
     scoreText.text = $"Score: {score}";
+    if (pauseAction.WasPressedThisFrame())
+    {
+      ChangePaused();
+    }
   }
 
   IEnumerator GameTimer()
@@ -91,8 +99,8 @@ public class GameManager : MonoBehaviour
     }
     else
     {
-      score = 0;
-      Score = 0;
+      score = 10;
+      Score = score;
     }
   }
   public void GameWon()
@@ -131,5 +139,19 @@ public class GameManager : MonoBehaviour
     gameOverText.gameObject.SetActive(false);
     StartCoroutine(nameof(SpawnTargets));
     StartCoroutine(nameof(GameTimer));
+  }
+
+  void ChangePaused()
+  {
+    isPaused = !isPaused;
+    if (isPaused)
+    {
+      Time.timeScale = 0;
+      pausePanel.SetActive(true);
+    } else
+    {
+      Time.timeScale = 1f;
+      pausePanel.SetActive(false);
+    }
   }
 }

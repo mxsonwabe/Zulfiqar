@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
-public class Target : MonoBehaviour, IPointerDownHandler
+public class Target : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler
 {
   Rigidbody rb;
   private float xRange = 4f;
@@ -64,7 +65,6 @@ public class Target : MonoBehaviour, IPointerDownHandler
   }
   public void OnPointerDown(PointerEventData eventData)
   {
-    Debug.Log($"Destroyed Object w/ event data:\n{eventData.ToString()}");
     //int value = gameObject.name.Replace("(Clone)", "") switch
     //{
     //  "Ball_1" => 5,
@@ -73,6 +73,24 @@ public class Target : MonoBehaviour, IPointerDownHandler
     //  "Bomb" => -15,
     //  _ => 0
     //};
+    ProcessHit();
+  }
+
+  public void OnPointerEnter(PointerEventData eventData)
+  {
+    Debug.Log("OnPointerEnter");
+    if (Pointer.current != null && Pointer.current.IsPressed())
+    { 
+      Debug.Log($"Mouse Pressed:\n{eventData}");
+      ProcessHit();
+    }
+  }
+
+  public void ProcessHit()
+  {
+    // Guard against being called after object is already destroyed
+    if (gameObject == null) return;
+
     gameManager.UpdateScore(targetPoints);
     Instantiate(explosionParticle, transform.position, explosionParticle.transform.rotation);
     if (gameManager.Score < 0)
