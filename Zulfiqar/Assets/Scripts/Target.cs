@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -11,8 +12,8 @@ public class Target : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler
   private float maxSpeed = 18f;
   private float maxTorque = 4f;
   GameManager gameManager;
-  [SerializeField] private ParticleSystem explosionParticle;
   [SerializeField] private int targetPoints;
+  [SerializeField] private ParticleSystem explosionParticle;
   // Start is called once before the first execution of Update after the MonoBehaviour is created
   void Start()
   {

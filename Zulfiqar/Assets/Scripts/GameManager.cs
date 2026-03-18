@@ -13,8 +13,10 @@ public class GameManager : MonoBehaviour
   float spawnRate = 1.25f;
   bool isGameActive;
   bool isPaused = false;
+  float earnedPointTextFontSize;
   AudioSource audioSource;
   InputAction pauseAction;
+  Coroutine earnedPointsAnimationCoroutine;
   public int Score { get; private set; }
   [SerializeField] private Button resetButton;
   [SerializeField] LifeController[] livesUIController;
@@ -22,6 +24,7 @@ public class GameManager : MonoBehaviour
   [SerializeField] private TextMeshProUGUI timerText;
   [SerializeField] private TextMeshProUGUI gameOverText;
   [SerializeField] private TextMeshProUGUI gameWonText;
+  [SerializeField] private TextMeshProUGUI earnedPointText;
   [SerializeField] private GameObject titleScreen;
   [SerializeField] private GameObject pausePanel;
   [SerializeField] private List<GameObject> gameObjects;
@@ -36,6 +39,7 @@ public class GameManager : MonoBehaviour
       Debug.LogWarning($"NO AUDIO SOURCE FOUND IN GAMEM+MANAGER: {this}");
     }
     pauseAction = InputSystem.actions.FindAction("Player/Pause", true);
+    earnedPointTextFontSize = earnedPointText.fontSize;
   }
 
   // Update is called once per frame
@@ -75,6 +79,7 @@ public class GameManager : MonoBehaviour
   {
     score += value;
     Score = score;
+    DisplayEarnedPoints(value);
   }
 
   public void GameOver()
@@ -137,6 +142,7 @@ public class GameManager : MonoBehaviour
     titleScreen.SetActive(false);
     resetButton.gameObject.SetActive(false);
     gameOverText.gameObject.SetActive(false);
+    earnedPointText.gameObject.SetActive(false);
     StartCoroutine(nameof(SpawnTargets));
     StartCoroutine(nameof(GameTimer));
   }
@@ -148,10 +154,56 @@ public class GameManager : MonoBehaviour
     {
       Time.timeScale = 0;
       pausePanel.SetActive(true);
-    } else
+    }
+    else
     {
       Time.timeScale = 1f;
       pausePanel.SetActive(false);
     }
+  }
+
+  void DisplayEarnedPoints(int earnedPoints)
+  {
+    if (earnedPoints > 0)
+    {
+      earnedPointText.text = $"+{earnedPoints}";
+      earnedPointText.color = Color.rebeccaPurple;
+    }
+    else
+    {
+      earnedPointText.text = $"{earnedPoints}";
+      earnedPointText.color = Color.red;
+    }
+    earnedPointText.fontSize = earnedPointTextFontSize; 
+    ShowAnimation();
+  }
+
+  void ShowAnimation()
+  {
+    earnedPointText.gameObject.SetActive(true);
+    if (earnedPointsAnimationCoroutine == null)
+    {
+      earnedPointsAnimationCoroutine = StartCoroutine(nameof(AnimateText));
+    }
+    else
+    {
+      StopCoroutine(nameof(AnimateText));
+      earnedPointsAnimationCoroutine = StartCoroutine(nameof(AnimateText));
+    }
+
+  }
+
+  IEnumerator AnimateText()
+  {
+    var x = 1f;
+    earnedPointText.alpha = x;
+    while (x > 0.1)
+    {
+      yield return new WaitForSeconds(0.1f);
+      x *= 0.9f;
+      earnedPointText.alpha = x;
+      earnedPointText.fontSize *= 0.9f;
+    }
+    earnedPointText.gameObject.SetActive(false);
   }
 }
