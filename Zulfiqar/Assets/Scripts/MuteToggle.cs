@@ -8,13 +8,14 @@ public class MuteToggle : MonoBehaviour
   [SerializeField] private Sprite muteSprite;
   [SerializeField] private Sprite unmuteSprite;
 
-  private bool isMuted = false;
+  private bool isMuted = true;
   // Start is called once before the first execution of Update after the MonoBehaviour is created
   void Start()
   {
     if (!buttonImage)
     {
       buttonImage = GetComponent<Image>();
+      AudioListener.pause = isMuted;
     }
   }
 

@@ -41,8 +41,7 @@ public class SwipeDetector : MonoBehaviour
     // fire the ray and check if it hits anything
     if (Physics.Raycast(ray, out RaycastHit hit, 100f))
     {
-      Target target = hit.collider.GetComponent<Target>();
-      if (target != null)
+      if (hit.collider.TryGetComponent<Target>(out var target))
       {
         target.ProcessHit();
       }
